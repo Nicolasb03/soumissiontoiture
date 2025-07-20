@@ -16,8 +16,31 @@ from src.routes.google_api import google_api_bp  # ⭐ NOUVEAU
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
 
-# Enable CORS for all routes
-CORS(app, resources={r"/*": {"origins": "https://jldpkzrj.manus.space"}})
+from fastapi.middleware.cors import CORSMiddleware
+
+# Configuration CORS plus détaillée
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://soumission-toirure-05f6ead9f71b.herokuapp.com",
+        "https://jldpkzrj.manus.space",
+        "https://e5h6i7cn08lj.manus.space"
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=[
+        "Content-Type", 
+        "Authorization", 
+        "Accept", 
+        "Origin", 
+        "X-Requested-With"
+    ],
+)
+
+# Ajouter handler OPTIONS pour preflight
+@app.options("/{full_path:path}")
+async def options_handler(full_path: str):
+    return {"message": "OK"}
 
 # Registration des blueprints
 app.register_blueprint(user_bp, url_prefix='/api')
