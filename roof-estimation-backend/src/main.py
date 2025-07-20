@@ -11,15 +11,19 @@ from src.models.conversation import ConversationSession
 from src.routes.user import user_bp
 from src.routes.estimation import estimation_bp
 from src.routes.conversation import conversation_bp
+from src.routes.google_api import google_api_bp  # ⭐ NOUVEAU
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
 
 # Enable CORS for all routes
 CORS(app, resources={r"/*": {"origins": "https://jldpkzrj.manus.space"}})
+
+# Registration des blueprints
 app.register_blueprint(user_bp, url_prefix='/api')
 app.register_blueprint(estimation_bp, url_prefix='/api')
 app.register_blueprint(conversation_bp, url_prefix='/api/conversation')
+app.register_blueprint(google_api_bp, url_prefix='/api')  # ⭐ NOUVEAU
 
 # uncomment if you need to use database
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
